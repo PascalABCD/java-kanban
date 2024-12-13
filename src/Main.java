@@ -15,9 +15,9 @@ public class Main {
         tm.createEpic(epic1);
         tm.createEpic(epic2);
 
-        Subtask subtask1 = new Subtask(epic1, "Subtask 1", "Description subtask 1", Status.NEW);
-        Subtask subtask2 = new Subtask(epic1, "Subtask 2", "Description subtask 3", Status.IN_PROGRESS);
-        Subtask subtask3 = new Subtask(epic2,"Subtask 3", "Description subtask 3", Status.NEW);
+        Subtask subtask1 = new Subtask(epic1.getId(), "Subtask 1", "Description subtask 1", Status.NEW);
+        Subtask subtask2 = new Subtask(epic1.getId(), "Subtask 2", "Description subtask 3", Status.IN_PROGRESS);
+        Subtask subtask3 = new Subtask(epic2.getId(), "Subtask 3", "Description subtask 3", Status.NEW);
 
         tm.createSubtask(subtask1);
         tm.createSubtask(subtask2);
@@ -36,8 +36,6 @@ public class Main {
         tm.updateSubtask(subtask1);
         tm.updateSubtask(subtask3);
         tm.updateSubtask(subtask3);
-        tm.updateEpicStatus(epic1);
-        tm.updateEpicStatus(epic2);
         System.out.println("Status update complete.");
 
         System.out.println("Getting info for tasks, subtasks, and epics...");
@@ -52,11 +50,5 @@ public class Main {
         System.out.println("Removing task 1...");
         tm.removeTask(task1);
         tm.getAllTasks();
-
-
-
-
-
-
     }
 }

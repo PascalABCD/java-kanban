@@ -6,14 +6,15 @@ public class TaskManager {
     private final HashMap<Integer, Subtask> subtasks = new HashMap<>();
     private final HashMap<Integer, Epic> epics = new HashMap<>();
 
-    public static int id = 1;
+    public int id = 1;
 
-    private static int generateId() {
+    private int generateId() {
         return id++;
     }
 
     public ArrayList<Task> getAllTasks() {
         System.out.println("List of all tasks:");
+        //I want to see in the console the list of all tasks
         for (Task task : tasks.values()) {
             System.out.println(task.toString());
         }
@@ -72,7 +73,10 @@ public class TaskManager {
 
     public void removeAllSubtasks() {
         System.out.println("All subtasks were removed successfully");
-        subtasks.clear();
+        for (Epic epic : epics.values()) {
+            epic.clearSubtasksList();
+            updateEpicStatus(epic);
+        }
     }
 
     public Subtask getSubtaskById(int subtaskId) {
@@ -88,6 +92,10 @@ public class TaskManager {
         int subtaskId = generateId();
         subtask.setId(subtaskId);
 
+        if (!epics.containsKey(subtask.getEpicId())) {
+            System.out.println("Epic does not exist");
+            return;
+        }
         Epic epic = epics.get(subtask.getEpicId());
         epic.addSubtask(subtask);
 
@@ -97,14 +105,31 @@ public class TaskManager {
 
     public Subtask updateSubtask(Subtask newSubtask) {
         int subtaskId = newSubtask.getId();
-        subtasks.replace(subtaskId, newSubtask);
-
-        return newSubtask;
+        if (subtasks.containsKey(subtaskId)) {
+            Subtask oldSubtask = subtasks.get(subtaskId);
+            if (oldSubtask.getEpicId() == newSubtask.getEpicId()) {
+                Epic epic = epics.get(newSubtask.getEpicId());
+                epic.removeSubtaskById(oldSubtask);
+                epic.addSubtask(newSubtask);
+                subtasks.replace(subtaskId, newSubtask);
+                updateEpicStatus(epic);
+                return newSubtask;
+            } else {
+                System.out.println("Cannot update. Subtask cannot be moved to another epic");
+                return null;
+            }
+        } else {
+            System.out.println("Cannot update. Subtask does not exist");
+            return null;
+        }
     }
 
     public void removeSubtask(Subtask subtask) {
         if (subtasks.containsKey(subtask.getId())) {
             subtasks.remove(subtask.getId());
+            Epic epic = epics.get(subtask.getEpicId());
+            epic.removeSubtaskById(subtask);
+            updateEpicStatus(epic);
             System.out.println("Subtask was removed successfully");
         } else {
             System.out.println("Cannot remove. Subtask does not exist.");
@@ -143,11 +168,12 @@ public class TaskManager {
         return epic;
     }
 
-    public Epic updateEpic(Epic newEpic) {
-        int epicId = newEpic.getId();
+    public Epic updateEpic(Epic epic) {
+        int epicId = epic.getId();
         if (epics.containsKey(epicId)) {
-            epics.replace(epicId, newEpic);
-
+            Epic newEpic = epics.get(epicId);
+            newEpic.setName(newEpic.getName());
+            newEpic.setDescription(newEpic.getDescription());
             return newEpic;
         } else {
             System.out.println("Epic does not exist");
@@ -158,6 +184,7 @@ public class TaskManager {
     public void removeEpic(Epic epic) {
         if (epics.containsKey(epic.getId())) {
             epics.remove(epic.getId());
+            epic.clearSubtasksList();
             System.out.println("Epic was removed successfully.");
         } else {
             System.out.println("Cannot remove. Epic does not exist");
@@ -165,7 +192,7 @@ public class TaskManager {
 
     }
 
-    public void updateEpicStatus(Epic epic) {
+    private void updateEpicStatus(Epic epic) {
         ArrayList<Subtask> subtasksList = epic.getSubtasksList();
         boolean allSubtasksDone = true;
         boolean allSubtasksNew = true;
@@ -177,10 +204,10 @@ public class TaskManager {
                 allSubtasksNew = false;
             }
         }
-        if (allSubtasksDone) {
-            epic.setStatus(Status.DONE);
-        } else if (allSubtasksNew) {
+        if (allSubtasksNew) {
             epic.setStatus(Status.NEW);
+        } else if (allSubtasksDone) {
+            epic.setStatus(Status.DONE);
         } else {
             epic.setStatus(Status.IN_PROGRESS);
         }
