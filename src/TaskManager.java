@@ -6,7 +6,7 @@ public class TaskManager {
     private final HashMap<Integer, Subtask> subtasks = new HashMap<>();
     private final HashMap<Integer, Epic> epics = new HashMap<>();
 
-    public int id = 1;
+    private int id = 1;
 
     private int generateId() {
         return id++;
@@ -89,13 +89,13 @@ public class TaskManager {
     }
 
     public void createSubtask(Subtask subtask) {
-        int subtaskId = generateId();
-        subtask.setId(subtaskId);
-
         if (!epics.containsKey(subtask.getEpicId())) {
             System.out.println("Epic does not exist");
             return;
         }
+
+        int subtaskId = generateId();
+        subtask.setId(subtaskId);
         Epic epic = epics.get(subtask.getEpicId());
         epic.addSubtask(subtask);
 
@@ -181,9 +181,10 @@ public class TaskManager {
         }
     }
 
-    public void removeEpic(Epic epic) {
-        if (epics.containsKey(epic.getId())) {
-            epics.remove(epic.getId());
+    public void removeEpic(int epicId) {
+        if (epics.containsKey(epicId)) {
+            epics.remove(epicId);
+            Epic epic = epics.get(epicId);
             epic.clearSubtasksList();
             System.out.println("Epic was removed successfully.");
         } else {
