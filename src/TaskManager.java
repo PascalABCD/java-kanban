@@ -183,9 +183,9 @@ public class TaskManager {
 
     public void removeEpic(int epicId) {
         if (epics.containsKey(epicId)) {
-            epics.remove(epicId);
             Epic epic = epics.get(epicId);
             epic.clearSubtasksList();
+            epics.remove(epicId);
             System.out.println("Epic was removed successfully.");
         } else {
             System.out.println("Cannot remove. Epic does not exist");
