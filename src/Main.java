@@ -44,7 +44,7 @@ public class Main {
         tm.getAllEpics();
 
         System.out.println("Removing epic 2...");
-        tm.removeEpic(epic2);
+        tm.removeEpic(epic2.getId());
         tm.getAllEpics();
 
         System.out.println("Removing task 1...");
