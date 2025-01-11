@@ -20,6 +20,6 @@ public class TaskTest {
     @Test
     public void checkTasksEqualWhenEqualIdTest() {
         boolean result = task.equals(task2);
-        assertTrue(result, "Задачи не равны.");
+        assertTrue(result, "Задачи должны быть равны");
     }
 }

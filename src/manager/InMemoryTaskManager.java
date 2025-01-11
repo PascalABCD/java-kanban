@@ -4,12 +4,13 @@ import model.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.List;
 
 public class InMemoryTaskManager implements TaskManager {
-    private final HashMap<Integer, Task> tasks = new HashMap<>();
-    private final HashMap<Integer, Subtask> subtasks = new HashMap<>();
-    private final HashMap<Integer, Epic> epics = new HashMap<>();
+    private final Map<Integer, Task> tasks = new HashMap<>();
+    private final Map<Integer, Subtask> subtasks = new HashMap<>();
+    private final Map<Integer, Epic> epics = new HashMap<>();
     private final HistoryManager hm = Managers.getDefaultHistory();
 
     private int id = 1;
@@ -91,6 +92,8 @@ public class InMemoryTaskManager implements TaskManager {
             epic.clearSubtasksList();
             updateEpicStatus(epic);
         }
+
+        subtasks.clear();
     }
 
     @Override
@@ -208,7 +211,9 @@ public class InMemoryTaskManager implements TaskManager {
     public void removeEpic(int epicId) {
         if (epics.containsKey(epicId)) {
             Epic epic = epics.get(epicId);
-            epic.clearSubtasksList();
+            for (Subtask subtask : epic.getSubtasksList()) {
+                subtasks.remove(subtask.getId());
+            }
             epics.remove(epicId);
             System.out.println("Epic was removed successfully.");
         } else {
