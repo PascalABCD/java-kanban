@@ -14,12 +14,12 @@ public class TaskTest {
     @BeforeEach
     void setUp() {
         task = new Task(1, "Test checkTasksNotEqual", "Test checkTasksNotEqual description", NEW);
-        task2 = new Task(1, "Test checkTasksNotEqual2", "Test checkTasksNotEqual2 description", NEW);
+        task2 = new Task(1, "Test checkTasksNotEqual2", "Test checkTasksNotEqual2 description", IN_PROGRESS);
     }
 
     @Test
     public void checkTasksEqualWhenEqualIdTest() {
         boolean result = task.equals(task2);
-        assertTrue(result, "Задачи должны быть равны");
+        assertTrue(result);
     }
 }
