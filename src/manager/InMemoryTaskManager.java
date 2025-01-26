@@ -148,10 +148,11 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void removeSubtask(Subtask subtask) {
         if (subtasks.containsKey(subtask.getId())) {
-            subtasks.remove(subtask.getId());
             Epic epic = epics.get(subtask.getEpicId());
             epic.removeSubtaskById(subtask);
+            subtasks.remove(subtask.getId());
             updateEpicStatus(epic);
+            hm.remove(subtask.getId());
             System.out.println("Subtask was removed successfully");
         } else {
             System.out.println("Cannot remove. Subtask does not exist.");
@@ -215,6 +216,7 @@ public class InMemoryTaskManager implements TaskManager {
                 subtasks.remove(subtask.getId());
             }
             epics.remove(epicId);
+            hm.remove(epicId);
             System.out.println("Epic was removed successfully.");
         } else {
             System.out.println("Cannot remove. Epic does not exist");
