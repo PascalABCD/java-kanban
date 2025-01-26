@@ -7,16 +7,16 @@ import java.util.HashMap;
 import java.util.List;
 
 public class InMemoryHistoryManager implements HistoryManager {
-    private final HashMap<Integer, Node<Task>> addedTasks = new HashMap<>();
-    private Node<Task> head;
-    private Node<Task> tail;
+    private final HashMap<Integer, Node> addedTasks = new HashMap<>();
+    private Node head;
+    private Node tail;
 
-    private static class Node<Task> {
-        public Node<Task> next;
-        public Node<Task> prev;
+    private static class Node {
+        public Node next;
+        public Node prev;
         public Task data;
 
-        public Node(Node<Task> prev, Task data, Node<Task> next) {
+        public Node(Node prev, Task data, Node next) {
             this.prev = prev;
             this.data = data;
             this.next = next;
@@ -44,8 +44,8 @@ public class InMemoryHistoryManager implements HistoryManager {
     }
 
     private void linkLast(Task e) {
-        final Node<Task> oldTail = tail;
-        final Node<Task> newNode = new Node<>(oldTail, e, null);
+        final Node oldTail = tail;
+        final Node newNode = new Node(oldTail, e, null);
         tail = newNode;
         addedTasks.put(e.getId(), newNode);
         if (oldTail == null)
@@ -56,7 +56,7 @@ public class InMemoryHistoryManager implements HistoryManager {
 
     private List<Task> getTasks() {
         List<Task> tasks = new ArrayList<>();
-        Node<Task> currentTask = head;
+        Node currentTask = head;
 
         while (currentTask != null) {
             tasks.add(currentTask.data);
@@ -66,10 +66,10 @@ public class InMemoryHistoryManager implements HistoryManager {
         return tasks;
     }
 
-    private void removeNode(Node<Task> node) {
+    private void removeNode(Node node) {
         if (node != null) {
-            final Node<Task> next = node.next;
-            final Node<Task> prev = node.prev;
+            final Node next = node.next;
+            final Node prev = node.prev;
 
             if (prev == null) {
                 head = next;
