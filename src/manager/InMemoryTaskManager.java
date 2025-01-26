@@ -73,6 +73,7 @@ public class InMemoryTaskManager implements TaskManager {
     public void removeTask(Task task) {
         if (tasks.containsValue(task)) {
             tasks.remove(task.getId());
+            hm.remove(task.getId());
             System.out.println("Task was removed successfully.");
         } else {
             System.out.println("Cannot remove. Task does not exist.");
