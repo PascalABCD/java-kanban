@@ -73,16 +73,16 @@ public class InMemoryHistoryManager implements HistoryManager {
 
             if (prev == null) {
                 head = next;
-            } else {
-                prev.next = next;
-                node.prev = null;
+                if (head != null) {
+                    head.prev = null;
+                }
             }
 
             if (next == null) {
                 tail = prev;
-            } else {
-                next.prev = prev;
-                node.next = null;
+                if (tail != null) {
+                    tail.next = null;
+                }
             }
 
             addedTasks.remove(node.data.getId());

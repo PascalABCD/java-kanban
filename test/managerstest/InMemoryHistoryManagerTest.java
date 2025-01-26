@@ -130,4 +130,34 @@ class InMemoryHistoryManagerTest {
         String expected = "[Subtask{id=5, name='SubTask 1', description='Description subtask 1', status=NEW, epicId=3}]";
         Assertions.assertEquals(expected, hm.getHistory().toString());
     }
+
+    @Test
+    void checkHistoryNotContainDeletedEpicWithSubtaskTest() {
+        Epic epic1 = new Epic("Epic 1", "Description epic 1");
+        tm.createEpic(epic1);
+        Subtask subtask2 = new Subtask(epic1.getId(), "Subtask 2", "Description 2", Status.NEW);
+        tm.createSubtask(subtask2);
+
+        tm.getEpicById(epic1.getId());
+        tm.getSubtaskById(subtask2.getId());
+
+        tm.removeAllEpics();
+
+        String expected = "[]";
+
+        Assertions.assertEquals(expected, tm.getHistory().toString());
+    }
+
+    @Test
+    void checkHistoryNotContainAllRemovedTasksTest() {
+        Task task1 = new Task("Task 1", "Description 1", Status.NEW);
+        tm.createTask(task1);
+
+        tm.getTaskById(1);
+        tm.removeAllTasks();
+
+        String expected = "[]";
+
+        Assertions.assertEquals(expected, hm.getHistory().toString());
+    }
 }
