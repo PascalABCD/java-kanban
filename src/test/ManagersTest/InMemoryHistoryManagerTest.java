@@ -1,4 +1,4 @@
-package tests.ManagersTest;
+package test.ManagersTest;
 
 import manager.InMemoryHistoryManager;
 import manager.InMemoryTaskManager;
