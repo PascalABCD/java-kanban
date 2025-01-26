@@ -1,14 +1,13 @@
 package tasktests;
 
 import model.Epic;
+import model.Status;
 import model.Subtask;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
-
-import static model.Status.NEW;
-import static org.junit.jupiter.api.Assertions.*;
 
 class EpicTest {
     private static Epic epic;
@@ -17,9 +16,9 @@ class EpicTest {
 
     @BeforeEach
     void setUp() {
-        epic = new Epic(1, "Test Epic", "Test Epic description", NEW);
-        subtask = new Subtask(1, "Test subtask", "Test subtask description", NEW);
-        subtask2 = new Subtask(2, "Test subtask2 2", "Test subtask2 description 2", NEW);
+        epic = new Epic(1, "Test Epic", "Test Epic description", Status.NEW);
+        subtask = new Subtask(1, "Test subtask", "Test subtask description", Status.NEW);
+        subtask2 = new Subtask(2, "Test subtask2 2", "Test subtask2 description 2", Status.NEW);
     }
 
     @Test
@@ -30,7 +29,7 @@ class EpicTest {
         List<Subtask> subtasks = epic.getSubtasksList();
         List<Subtask> expected = List.of(subtask, subtask2);
 
-        assertEquals(expected, subtasks);
+        Assertions.assertEquals(expected, subtasks);
     }
 
     @Test
@@ -43,6 +42,6 @@ class EpicTest {
         List<Subtask> subtasks = epic.getSubtasksList();
         List<Subtask> expected = List.of(subtask2);
 
-        assertEquals(expected, subtasks);
+        Assertions.assertEquals(expected, subtasks);
     }
 }
