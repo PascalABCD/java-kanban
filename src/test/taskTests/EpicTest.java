@@ -1,4 +1,4 @@
-package test.TaskTests;
+package taskTests;
 
 import model.Epic;
 import model.Subtask;
