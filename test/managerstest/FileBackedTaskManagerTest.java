@@ -51,13 +51,10 @@ class FileBackedTaskManagerTest {
 
     @Test
     void emptyFileTest() {
-        fm.save();
-
         FileBackedTaskManager manager = FileBackedTaskManager.loadFromFile(testFile);
-
-        assertTrue(manager.getAllTasks().isEmpty());
-        assertTrue(manager.getAllEpics().isEmpty());
-        assertTrue(manager.getAllSubtasks().isEmpty());
+        assertEquals(0, manager.getAllTasks().size());
+        assertEquals(0, manager.getAllEpics().size());
+        assertEquals(0, manager.getAllSubtasks().size());
     }
 
     @Test
@@ -70,8 +67,6 @@ class FileBackedTaskManagerTest {
         Subtask subTask1 = new Subtask(epic1.getId(), "Subtask", "Description", Status.IN_PROGRESS);
         fm.createSubtask(subTask1);
         fm.updateEpic(epic1);
-
-        fm.save();
 
         List<String> lines;
         try {
@@ -91,17 +86,16 @@ class FileBackedTaskManagerTest {
         File testFile = new File("test/managerstest/testData.csv");
         fm = FileBackedTaskManager.loadFromFile(testFile);
 
-        ArrayList<Task> expectedTasks = new ArrayList<>();
-        expectedTasks.add(new Task(1, "Task1", "Description1", Status.NEW));
-        expectedTasks.add(new Task(2, "Task2", "Description2", Status.IN_PROGRESS));
-        expectedTasks.add(new Task(4, "Task4", "Description4", Status.NEW));
-        expectedTasks.add(new Task(5, "Task5", "Description5", Status.NEW));
+        String expectedTasks = "[Task{id=1, name='Task1', description='Description1', status=NEW}, " +
+                "Task{id=3, name='Task2', description='Description2', status=NEW}]";
 
-        ArrayList<Epic> expectedEpics = new ArrayList<>();
-        expectedEpics.add(new Epic(3, "Epic1", "DescriptionEpic1", Status.NEW));
+        String expectedEpics = "[Epic{id=2, name='Epic1', description='DescriptionEpic1', status=NEW, " +
+                "subtasksList=[Subtask{id=4, name='Subtask1', description='DescriptionSubtask1', status=NEW, epicId=2}]}]";
 
-        String actual = fm.getAllTasks().toString() + fm.getAllEpics().toString();
-        String expected = expectedTasks + expectedEpics.toString();
+        String expectedSubtasks = "[Subtask{id=4, name='Subtask1', description='DescriptionSubtask1', status=NEW, epicId=2}]";
+
+        String actual = fm.getAllTasks().toString() + fm.getAllEpics().toString() + fm.getAllSubtasks().toString();
+        String expected = expectedTasks + expectedEpics + expectedSubtasks;
         assertEquals(expected, actual);
     }
 
@@ -109,10 +103,8 @@ class FileBackedTaskManagerTest {
     void removeTaskAndCheckFileContentTest() {
         fm.createTask(task1);
         fm.createTask(task2);
-        fm.save();
 
         fm.removeTask(task1);
-        fm.save();
 
         FileBackedTaskManager manager = FileBackedTaskManager.loadFromFile(testFile);
         List<Task> tasks = manager.getAllTasks();

@@ -17,7 +17,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         this.file = file;
     }
 
-    public void save() {
+    private void save() {
         String header = "id,type,name,status,description,epic\n";
         try (FileWriter writer = new FileWriter(file)) {
             writer.write(header);
@@ -41,7 +41,9 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
         try {
             List<String> allLines = Files.readAllLines(file.toPath());
-            allLines.removeFirst();
+            if (!allLines.isEmpty()) {
+                allLines.removeFirst();
+            }
 
             for (String line : allLines) {
                 Task task = fromString(line);
@@ -56,6 +58,14 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                     manager.subtasks.put(task.getId(), (Subtask) task);
                 } else {
                     manager.tasks.put(task.getId(), task);
+                }
+
+                // добавляем сабтаски в материнские эпики
+                if (task instanceof Subtask subtask) {
+                    Epic epic = manager.epics.get(subtask.getEpicId());
+                    if (epic != null) {
+                        epic.addSubtask(subtask);
+                    }
                 }
             }
             manager.setId(maxId + 1);
@@ -91,17 +101,17 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
     private static Task fromString(String value) {
         String[] parts = value.split(",");
+
         int id = Integer.parseInt(parts[0]);
         TaskTypes type = TaskTypes.valueOf(parts[1]);
         String name = parts[2];
         Status status = Status.valueOf(parts[3]);
         String description = parts[4];
-        // если это подзадача, то в parts[5] будет id эпика, иначе 0
-        int epicId = parts.length == 6 ? Integer.parseInt(parts[5]) : 0;
 
         if (type == TASK) {
             return new Task(id, name, description, status);
         } else if (type == SUBTASK) {
+            int epicId = parts.length == 6 ? Integer.parseInt(parts[5]) : 0;
             return new Subtask(epicId, id, name, description, status);
         } else {
             return new Epic(id, name, description, status);
@@ -150,7 +160,6 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         }
     }
 
-    @Override
     public List<Task> getAllTasks() {
         return super.getAllTasks();
     }
@@ -196,7 +205,6 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         }
     }
 
-    @Override
     public List<Subtask> getAllSubtasks() {
         return super.getAllSubtasks();
     }
@@ -243,7 +251,6 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         }
     }
 
-    @Override
     public List<Epic> getAllEpics() {
         return super.getAllEpics();
     }

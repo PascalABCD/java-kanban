@@ -1,6 +1,5 @@
 id,type,name,status,description,epic
 1,TASK,Task1,NEW,Description1
-2,TASK,Task2,IN_PROGRESS,Description2
-3,EPIC,Epic1,NEW,DescriptionEpic1
-4,TASK,Task4,NEW,Description4
-5,TASK,Task5,NEW,Description5
+2,EPIC,Epic1,NEW,DescriptionEpic1
+3,TASK,Task2,NEW,Description2
+4,SUBTASK,Subtask1,NEW,DescriptionSubtask1,2
