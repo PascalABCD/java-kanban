@@ -160,10 +160,6 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         }
     }
 
-    public List<Task> getAllTasks() {
-        return super.getAllTasks();
-    }
-
     @Override
     public void createSubtask(Subtask subtask) {
         super.createSubtask(subtask);
@@ -203,10 +199,6 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         } catch (ManagerSaveException e) {
             System.out.println(e.getMessage());
         }
-    }
-
-    public List<Subtask> getAllSubtasks() {
-        return super.getAllSubtasks();
     }
 
     @Override
@@ -249,9 +241,5 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         } catch (ManagerSaveException e) {
             System.out.println(e.getMessage());
         }
-    }
-
-    public List<Epic> getAllEpics() {
-        return super.getAllEpics();
     }
 }
