@@ -8,20 +8,27 @@ import java.util.Map;
 import java.util.List;
 
 public class InMemoryTaskManager implements TaskManager {
-    private final Map<Integer, Task> tasks = new HashMap<>();
-    private final Map<Integer, Subtask> subtasks = new HashMap<>();
-    private final Map<Integer, Epic> epics = new HashMap<>();
-    private final HistoryManager hm = Managers.getDefaultHistory();
+    protected final Map<Integer, Task> tasks = new HashMap<>();
+    protected final Map<Integer, Subtask> subtasks = new HashMap<>();
+    protected final Map<Integer, Epic> epics = new HashMap<>();
+    protected final HistoryManager hm = Managers.getDefaultHistory();
 
     private int id = 1;
+
+    public int getId() {
+        return id;
+    }
 
     private int generateId() {
         return id++;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
     @Override
     public List<Task> getAllTasks() {
-        System.out.println("List of all tasks:");
         for (Task task : tasks.values()) {
             System.out.println(task.toString());
         }
@@ -34,7 +41,6 @@ public class InMemoryTaskManager implements TaskManager {
             hm.remove(task.getId());
         }
         tasks.clear();
-        System.out.println("All tasks were removed successfully");
     }
 
     @Override
@@ -74,7 +80,6 @@ public class InMemoryTaskManager implements TaskManager {
         if (tasks.containsValue(task)) {
             tasks.remove(task.getId());
             hm.remove(task.getId());
-            System.out.println("Task was removed successfully.");
         } else {
             System.out.println("Cannot remove. Task does not exist.");
         }
@@ -82,7 +87,6 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public List<Subtask> getAllSubtasks() {
-        System.out.println("List of all subtasks:");
         for (Subtask subtask : subtasks.values()) {
             System.out.println(subtask.toString());
         }
@@ -91,7 +95,6 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void removeAllSubtasks() {
-        System.out.println("All subtasks were removed successfully");
         for (Subtask subtask : subtasks.values()) {
             hm.remove(subtask.getId());
         }
@@ -161,7 +164,6 @@ public class InMemoryTaskManager implements TaskManager {
             subtasks.remove(subtask.getId());
             updateEpicStatus(epic);
             hm.remove(subtask.getId());
-            System.out.println("Subtask was removed successfully");
         } else {
             System.out.println("Cannot remove. Subtask does not exist.");
         }
@@ -169,7 +171,6 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public List<Epic> getAllEpics() {
-        System.out.println("List of all epics:");
         for (Epic epic : epics.values()) {
             System.out.println(epic.toString());
         }
@@ -188,7 +189,6 @@ public class InMemoryTaskManager implements TaskManager {
 
         epics.clear();
         subtasks.clear();
-        System.out.println("All epics were removed successfully");
     }
 
     @Override
@@ -234,7 +234,6 @@ public class InMemoryTaskManager implements TaskManager {
             }
             epics.remove(epicId);
             hm.remove(epicId);
-            System.out.println("Epic was removed successfully.");
         } else {
             System.out.println("Cannot remove. Epic does not exist");
         }
