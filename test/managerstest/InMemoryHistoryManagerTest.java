@@ -7,6 +7,9 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+
 class InMemoryHistoryManagerTest {
     private static InMemoryHistoryManager hm;
     private InMemoryTaskManager tm;
@@ -19,9 +22,9 @@ class InMemoryHistoryManagerTest {
         hm = new InMemoryHistoryManager();
         tm = new InMemoryTaskManager();
 
-        task1 = new Task(1, "Task 1", "Description 1", Status.NEW);
-        epic1 = new Epic(3, "Epic 1", "Description epic 1", Status.NEW);
-        subtask1 = new Subtask(epic1.getId(), 5, "SubTask 1", "Description subtask 1", Status.NEW);
+        task1 = new Task(1, "Task 1", "Description 1", Status.NEW, Duration.ofHours(5), LocalDateTime.now());
+        epic1 = new Epic(3, "Epic 1", "Description epic 1", Status.NEW, Duration.ofHours(5), LocalDateTime.now());
+        subtask1 = new Subtask(epic1.getId(), 5, "SubTask 1", "Description subtask 1", Status.NEW, Duration.ofHours(5), LocalDateTime.now());
 
     }
 
@@ -45,7 +48,7 @@ class InMemoryHistoryManagerTest {
         tm.createTask(task1);
         tm.createEpic(epic1);
 
-        Subtask subtask2 = new Subtask(epic1.getId(), "Subtask", "Description", Status.NEW);
+        Subtask subtask2 = new Subtask(epic1.getId(), "Subtask", "Description", Status.NEW, Duration.ofHours(5), LocalDateTime.now());
         tm.createSubtask(subtask2);
 
         tm.getTaskById(1);
@@ -70,19 +73,19 @@ class InMemoryHistoryManagerTest {
     @Test
     void checkHistorySizeTest() {
         for (int i = 1; i < 5; i++) {
-            Task task = new Task("Task " + i, "Description " + i, Status.NEW);
+            Task task = new Task("Task " + i, "Description " + i, Status.NEW, Duration.ofHours(5), LocalDateTime.now());
             tm.createTask(task);
             tm.getTaskById(i);
         }
 
         for (int i = 5; i < 10; i++) {
-            Epic epic = new Epic("Epic " + i, "Description epic " + i);
+            Epic epic = new Epic("Epic " + i, "Description epic " + i, Duration.ofHours(5), LocalDateTime.now());
             tm.createEpic(epic);
             tm.getEpicById(i);
         }
 
         for (int i = 10; i < 12; i++) {
-            Subtask subtask = new Subtask(5, "Subtask " + i, "Description " + i, Status.NEW);
+            Subtask subtask = new Subtask(5, "Subtask " + i, "Description " + i, Status.NEW, Duration.ofHours(5), LocalDateTime.now());
             tm.createSubtask(subtask);
             tm.getSubtaskById(i);
         }
@@ -122,7 +125,7 @@ class InMemoryHistoryManagerTest {
 
     @Test
     void checkHistoryNotContainRemovedTaskTest() {
-        Subtask subtask2 = new Subtask(epic1.getId(), "Subtask 2", "Description 2", Status.NEW);
+        Subtask subtask2 = new Subtask(epic1.getId(), "Subtask 2", "Description 2", Status.NEW, Duration.ofHours(5), LocalDateTime.now());
         hm.add(subtask1);
         hm.add(subtask2);
         hm.remove(subtask2.getId());
@@ -133,9 +136,9 @@ class InMemoryHistoryManagerTest {
 
     @Test
     void checkHistoryNotContainDeletedEpicWithSubtaskTest() {
-        Epic epic1 = new Epic("Epic 1", "Description epic 1");
+        Epic epic1 = new Epic("Epic 1", "Description epic 1", Duration.ofHours(5), LocalDateTime.now());
         tm.createEpic(epic1);
-        Subtask subtask2 = new Subtask(epic1.getId(), "Subtask 2", "Description 2", Status.NEW);
+        Subtask subtask2 = new Subtask(epic1.getId(), "Subtask 2", "Description 2", Status.NEW, Duration.ofHours(5), LocalDateTime.now());
         tm.createSubtask(subtask2);
 
         tm.getEpicById(epic1.getId());
@@ -150,7 +153,7 @@ class InMemoryHistoryManagerTest {
 
     @Test
     void checkHistoryNotContainAllRemovedTasksTest() {
-        Task task1 = new Task("Task 1", "Description 1", Status.NEW);
+        Task task1 = new Task("Task 1", "Description 1", Status.NEW, Duration.ofHours(5), LocalDateTime.now());
         tm.createTask(task1);
 
         tm.getTaskById(1);
