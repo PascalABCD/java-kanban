@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 public abstract class TaskManagerTest<T extends TaskManager>{
     protected abstract T createManager();
 
-    protected TaskManager tm;
+    protected TaskManager taskManager = createManager();
     private static Task task1;
     private static Task task2;
     private static Epic epic1;
@@ -30,8 +30,8 @@ public abstract class TaskManagerTest<T extends TaskManager>{
     @Test
     void checkIdGeneratorTest() {
         Task taskEqualId = new Task(1, "Task 3", "Description 3", Status.NEW, Duration.ofHours(5), LocalDateTime.of(2021, 1, 1, 1, 1));
-        tm.createTask(task1);
-        tm.createTask(taskEqualId);
+        taskManager.createTask(task1);
+        taskManager.createTask(taskEqualId);
 
         final int taskId1 = task1.getId();
         final int taskIdEqual = taskEqualId.getId();
@@ -42,16 +42,16 @@ public abstract class TaskManagerTest<T extends TaskManager>{
 
     @Test
     void getAllTasksTest() {
-        tm.createTask(task1);
-        tm.createTask(task2);
+        taskManager.createTask(task1);
+        taskManager.createTask(task2);
 
         String expectedTasks = "[Task{id=1, name='Task 1', description='Description 1', status=NEW, durationPT5H, startTime=2021-01-01T01:01}, Task{id=2, name='Task 2', description='Description 2', status=NEW, durationPT5H, startTime=2021-02-01T01:01}]";
-        Assertions.assertEquals(expectedTasks, tm.getAllTasks().toString());
+        Assertions.assertEquals(expectedTasks, taskManager.getAllTasks().toString());
     }
 
     @Test
     void createTaskTest() {
-        tm.createTask(task1);
+        taskManager.createTask(task1);
 
         String expectedTask = "Task{id=1, name='Task 1', description='Description 1', status=NEW, durationPT5H, startTime=2021-01-01T01:01}";
         Assertions.assertEquals(expectedTask, task1.toString());
@@ -59,21 +59,21 @@ public abstract class TaskManagerTest<T extends TaskManager>{
 
     @Test
     void removeAllTasksTest() {
-        tm.createTask(task1);
-        tm.createTask(task2);
+        taskManager.createTask(task1);
+        taskManager.createTask(task2);
 
-        tm.removeAllTasks();
+        taskManager.removeAllTasks();
         String expected = "[]";
-        Assertions.assertEquals(expected, tm.getAllTasks().toString());
+        Assertions.assertEquals(expected, taskManager.getAllTasks().toString());
     }
 
     @Test
     void updateEpicStatusTest() {
-        tm.createEpic(epic1);
+        taskManager.createEpic(epic1);
         Subtask subtask = new Subtask(epic1.getId(), "Subtask 1", "Description 1", Status.NEW, Duration.ofHours(5), LocalDateTime.of(2021, 1, 8, 1, 1));
 
         epic1.addSubtask(subtask);
-        tm.updateEpic(epic1);
+        taskManager.updateEpic(epic1);
         String epicStatus = epic1.getStatus().toString();
 
         Assertions.assertEquals("NEW", epicStatus);
@@ -81,11 +81,11 @@ public abstract class TaskManagerTest<T extends TaskManager>{
 
     @Test
     void checkPriorityTest() {
-        tm.createTask(task2);
-        tm.createTask(task1);
+        taskManager.createTask(task2);
+        taskManager.createTask(task1);
 
         String expectedTasks = "[Task{id=2, name='Task 2', description='Description 2', status=NEW, durationPT5H, startTime=2021-02-01T01:01}, Task{id=2, name='Task 1', description='Description 1', status=NEW, durationPT5H, startTime=2021-01-01T01:01}]";
-        String actualTasks = tm.getPrioritizedTasks().toString();
+        String actualTasks = taskManager.getPrioritizedTasks().toString();
         Assertions.assertEquals(expectedTasks, actualTasks);
     }
 }
