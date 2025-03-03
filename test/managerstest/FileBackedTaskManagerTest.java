@@ -60,13 +60,13 @@ class FileBackedTaskManagerTest {
 
     @Test
     void saveAndLoadTasks() {
-        Task task1 = new Task("Task", "Description", Status.NEW, Duration.ofHours(1), LocalDateTime.of(2021, 1, 1, 1, 1));
+        Task task1 = new Task("Task", "Description", Status.NEW, Duration.ofHours(1), LocalDateTime.of(2022, 1, 1, 1, 1));
         // values for startTime and Duration should be ignored and taken from Subtasks
         Epic epic1 = new Epic("Epic", "Description", Duration.ofHours(5), LocalDateTime.of(2021, 2, 1, 1, 1));
         fm.createTask(task1);
         fm.createEpic(epic1);
 
-        Subtask subTask1 = new Subtask(epic1.getId(), "Subtask", "Description", Status.IN_PROGRESS, Duration.ofHours(1), LocalDateTime.of(2021, 3, 1, 1, 1));
+        Subtask subTask1 = new Subtask(epic1.getId(), "Subtask", "Description", Status.IN_PROGRESS, Duration.ofHours(1), LocalDateTime.of(2023, 3, 1, 1, 1));
         fm.createSubtask(subTask1);
         fm.updateEpic(epic1);
 
@@ -74,9 +74,9 @@ class FileBackedTaskManagerTest {
         try {
             lines = Files.readAllLines(testFile.toPath());
             assertEquals("id,type,name,status,description,duration,startTime,epic", lines.get(0));
-            assertEquals("1,TASK,Task,NEW,Description,PT1H,2021-01-01T01:01", lines.get(1));
-            assertEquals("3,SUBTASK,Subtask,IN_PROGRESS,Description,PT1H,2021-03-01T01:01,2", lines.get(2));
-            assertEquals("2,EPIC,Epic,IN_PROGRESS,Description,PT1H,2021-03-01T01:01", lines.get(3));
+            assertEquals("1,TASK,Task,NEW,Description,PT1H,2022-01-01T01:01", lines.get(1));
+            assertEquals("3,SUBTASK,Subtask,IN_PROGRESS,Description,PT1H,2023-03-01T01:01,2", lines.get(2));
+            assertEquals("2,EPIC,Epic,IN_PROGRESS,Description,PT1H,2023-03-01T01:01", lines.get(3));
         } catch (IOException e) {
             System.out.println("Error reading file");
             throw new RuntimeException(e);
