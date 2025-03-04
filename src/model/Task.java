@@ -11,7 +11,12 @@ public class Task {
     protected Status status;
     protected Duration duration;
     protected LocalDateTime startTime;
-    protected LocalDateTime endTime;
+
+    public Task(String name, String description, Status status) {
+        this.name = name;
+        this.description = description;
+        this.status = status;
+    }
 
     public Task(String name, String description, Status status, Duration duration, LocalDateTime startTime) {
         this.name = name;
@@ -28,7 +33,6 @@ public class Task {
         this.status = status;
         this.duration = duration;
         this.startTime = startTime;
-        this.endTime = startTime.plus(duration);
     }
 
 

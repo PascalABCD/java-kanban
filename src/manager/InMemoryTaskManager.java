@@ -35,7 +35,10 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void removeAllTasks() {
-        tasks.values().forEach(task -> hm.remove(task.getId()));
+        tasks.values().forEach(task -> {
+            hm.remove(task.getId());
+            prioritizedTasks.remove(task);
+        });
         tasks.clear();
     }
 
@@ -73,6 +76,7 @@ public class InMemoryTaskManager implements TaskManager {
 
         int taskId = newTask.getId();
         if (tasks.containsKey(taskId)) {
+            prioritizedTasks.remove(tasks.get(taskId));
             tasks.replace(taskId, newTask);
             if (newTask.getStartTime() != null) {
                 prioritizedTasks.add(newTask);
@@ -104,12 +108,14 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void removeAllSubtasks() {
-        subtasks.values().forEach(subtask -> hm.remove(subtask.getId()));
+        subtasks.values().forEach(subtask -> {
+            hm.remove(subtask.getId());
+            prioritizedTasks.remove(subtask);
+        });
         epics.values().forEach(epic -> {
             epic.clearSubtasksList();
             updateEpicStatus(epic);
             updateEpicTimeFields(epic);
-            prioritizedTasks.remove(epic);
         });
 
         subtasks.clear();
@@ -157,14 +163,15 @@ public class InMemoryTaskManager implements TaskManager {
         int subtaskId = newSubtask.getId();
         if (subtasks.containsKey(subtaskId)) {
             Subtask oldSubtask = subtasks.get(subtaskId);
+            prioritizedTasks.remove(oldSubtask);
             if (oldSubtask.getEpicId() == newSubtask.getEpicId()) {
                 Epic epic = epics.get(newSubtask.getEpicId());
                 epic.removeSubtaskById(oldSubtask);
                 epic.addSubtask(newSubtask);
                 subtasks.replace(subtaskId, newSubtask);
+                prioritizedTasks.add(newSubtask);
                 updateEpicStatus(epic);
                 updateEpicTimeFields(epic);
-                prioritizedTasks.add(newSubtask);
                 return newSubtask;
             } else {
                 System.out.println("Cannot update. Subtask cannot be moved to another epic");
@@ -229,7 +236,6 @@ public class InMemoryTaskManager implements TaskManager {
         epic.setId(epicId);
 
         epics.put(epic.getId(), epic);
-        prioritizedTasks.add(epic);
     }
 
     @Override
@@ -298,22 +304,22 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     private boolean isTaskTimeOverlapping(Task task) {
-            return prioritizedTasks.stream()
-                    .filter(t -> t.getId() != task.getId()) // Это проверка, что нам надо отфильтровать саму задачу
-                    .anyMatch(t -> {
-                        LocalDateTime start1 = task.getStartTime();
-                        LocalDateTime end1 = task.getEndTime();
-                        LocalDateTime start2 = t.getStartTime();
-                        LocalDateTime end2 = t.getEndTime();
+        return prioritizedTasks.stream()
+                .filter(t -> t.getId() != task.getId()) // Это проверка, что нам надо отфильтровать саму задачу
+                .anyMatch(t -> {
+                    LocalDateTime start1 = task.getStartTime();
+                    LocalDateTime end1 = task.getEndTime();
+                    LocalDateTime start2 = t.getStartTime();
+                    LocalDateTime end2 = t.getEndTime();
 
-                        // если даты null, надо вернуть false, пересечения нет
-                        if (start1 == null || end1 == null || start2 == null || end2 == null) {
-                            return false;
-                        }
-                        // пересечение, если конец Р2 после начала второй задачи Р3
-                        // если старт Р3 до конца второй задачи Р4
-                        return end1.isAfter(start2) && start1.isBefore(end2);
-                    });
+                    // если даты null, надо вернуть false, пересечения нет
+                    if (start1 == null || end1 == null || start2 == null || end2 == null) {
+                        return false;
+                    }
+                    // пересечение, если конец Р2 после начала второй задачи Р3
+                    // если старт Р3 до конца второй задачи Р4
+                    return end1.isAfter(start2) && start1.isBefore(end2);
+                });
     }
 
     @Override
