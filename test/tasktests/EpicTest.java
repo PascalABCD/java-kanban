@@ -7,6 +7,8 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.List;
 
 class EpicTest {
@@ -16,9 +18,9 @@ class EpicTest {
 
     @BeforeEach
     void setUp() {
-        epic = new Epic(1, "Test Epic", "Test Epic description", Status.NEW);
-        subtask = new Subtask(1, "Test subtask", "Test subtask description", Status.NEW);
-        subtask2 = new Subtask(2, "Test subtask2 2", "Test subtask2 description 2", Status.NEW);
+        epic = new Epic(1, "Test Epic", "Test Epic description", Status.NEW, Duration.ofHours(1), LocalDateTime.now());
+        subtask = new Subtask(1, "Test subtask", "Test subtask description", Status.NEW, Duration.ofHours(1), LocalDateTime.now());
+        subtask2 = new Subtask(2, "Test subtask2 2", "Test subtask2 description 2", Status.NEW, Duration.ofDays(1), LocalDateTime.now().plus(Duration.ofHours(1)));
     }
 
     @Test
