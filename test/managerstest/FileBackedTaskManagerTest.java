@@ -111,7 +111,7 @@ class FileBackedTaskManagerTest {
         fm.createTask(task1);
         fm.createTask(task2);
 
-        fm.removeTask(task1);
+        fm.removeTask(task1.getId());
 
         FileBackedTaskManager manager = FileBackedTaskManager.loadFromFile(testFile);
         List<Task> tasks = manager.getAllTasks();
