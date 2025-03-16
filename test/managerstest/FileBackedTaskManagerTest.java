@@ -89,17 +89,17 @@ class FileBackedTaskManagerTest {
         fm = FileBackedTaskManager.loadFromFile(testFile);
 
         String expectedTasks = "[Task{id=1, name='Task1', description='Description1', status=NEW, " +
-                "durationPT1H, startTime=2021-01-01T01:01}, " +
-                "Task{id=3, name='Task2', description='Description2', status=NEW, durationPT1H, " +
+                "duration=PT1H, startTime=2021-01-01T01:01}, " +
+                "Task{id=3, name='Task2', description='Description2', status=NEW, duration=PT1H, " +
                 "startTime=2021-01-01T01:01}]";
 
         String expectedEpics = "[Epic{id=2, name='Epic1', description='DescriptionEpic1', status=NEW, " +
                 "subtasksList=[Subtask{id=4, name='Subtask1', description='DescriptionSubtask1', status=NEW, " +
-                "durationPT1H, startTime=2021-01-01T01:01, epicId=2}], " +
-                "durationPT1H, startTime=2021-01-01T01:01}]";
+                "duration=PT1H, startTime=2021-01-01T01:01, epicId=2}], " +
+                "duration=PT1H, startTime=2021-01-01T01:01}]";
 
         String expectedSubtasks = "[Subtask{id=4, name='Subtask1', description='DescriptionSubtask1', status=NEW, " +
-                "durationPT1H, startTime=2021-01-01T01:01, epicId=2}]";
+                "duration=PT1H, startTime=2021-01-01T01:01, epicId=2}]";
 
         String actual = fm.getAllTasks().toString() + fm.getAllEpics().toString() + fm.getAllSubtasks().toString();
         String expected = expectedTasks + expectedEpics + expectedSubtasks;
