@@ -42,10 +42,10 @@ public class EpicHandler extends BaseHttpHandler {
                 }
             }
             case "POST" -> {
-                if (path.length == 2) {
-                    createEpic(h);
+                if (path.length == 3) {
+                    updateEpic(h);
                 } else {
-                    sendNotFound(h);
+                    createEpic(h);
                 }
             }
         }
@@ -108,6 +108,20 @@ public class EpicHandler extends BaseHttpHandler {
 
         try {
             tm.createEpic(epic);
+            sendResponse(h, gson.toJson(epic), 201);
+        } catch (Exception e) {
+            sendInternalServerError(h);
+        }
+    }
+
+    private void updateEpic(HttpExchange h) throws IOException {
+        String requestBody = new String(h.getRequestBody().readAllBytes(), StandardCharsets.UTF_8);
+        JsonElement element = JsonParser.parseString(requestBody);
+        JsonObject jsonObject = element.getAsJsonObject();
+        Epic epic = gson.fromJson(jsonObject, Epic.class);
+
+        try {
+            tm.updateEpic(epic);
             sendResponse(h, gson.toJson(epic), 201);
         } catch (Exception e) {
             sendInternalServerError(h);

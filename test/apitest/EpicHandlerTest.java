@@ -5,6 +5,7 @@ import api.adapter.DurationAdapter;
 import api.adapter.LocalDateTimeAdapter;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import manager.Managers;
 import manager.TaskManager;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,8 +17,8 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 
 class EpicHandlerTest {
-    private final HttpTaskServer server = new HttpTaskServer();
-    private final TaskManager tm = server.getManager();
+    private final TaskManager tm = Managers.getDefault();
+    private final HttpTaskServer server = new HttpTaskServer(8080, tm);
     private final Gson gson = new GsonBuilder()
             .registerTypeAdapter(Duration.class, new DurationAdapter())
             .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())

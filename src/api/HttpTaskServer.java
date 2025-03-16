@@ -15,12 +15,12 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 
 public class HttpTaskServer {
-    private final int port = 8080;
+    private final int port;
     private final HttpServer server;
-    private final TaskManager tm;
 
-    public HttpTaskServer() throws IOException {
-        tm = Managers.getDefault();
+    public HttpTaskServer(int port, TaskManager tm) throws IOException {
+        this.port = port;
+
         server = HttpServer.create(new InetSocketAddress(port), 0);
 
         Gson gson = new GsonBuilder()
@@ -39,15 +39,11 @@ public class HttpTaskServer {
 
     public static void main(String[] args) {
         try {
-            HttpTaskServer taskServer = new HttpTaskServer();
+            HttpTaskServer taskServer = new HttpTaskServer(8080, Managers.getDefault());
             taskServer.start();
         } catch (IOException exception) {
             exception.printStackTrace();
         }
-    }
-
-    public TaskManager getManager() {
-        return tm;
     }
 
     public void start() {

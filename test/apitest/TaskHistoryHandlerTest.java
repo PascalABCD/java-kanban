@@ -1,6 +1,7 @@
 package apitest;
 
 import api.HttpTaskServer;
+import manager.Managers;
 import manager.TaskManager;
 import model.Epic;
 import model.Status;
@@ -21,8 +22,8 @@ import java.time.LocalDateTime;
 import static org.junit.jupiter.api.Assertions.*;
 
 class TaskHistoryHandlerTest {
-    private final HttpTaskServer server = new HttpTaskServer();
-    private final TaskManager tm = server.getManager();
+    private final TaskManager tm = Managers.getDefault();
+    private final HttpTaskServer server = new HttpTaskServer(8080, tm);
     private final HttpClient client = HttpClient.newHttpClient();
 
     TaskHistoryHandlerTest() throws IOException {
