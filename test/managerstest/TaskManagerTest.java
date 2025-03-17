@@ -45,7 +45,7 @@ public abstract class TaskManagerTest<T extends TaskManager>{
         taskManager.createTask(task1);
         taskManager.createTask(task2);
 
-        String expectedTasks = "[Task{id=1, name='Task 1', description='Description 1', status=NEW, durationPT5H, startTime=2021-01-01T01:01}, Task{id=2, name='Task 2', description='Description 2', status=NEW, durationPT5H, startTime=2021-02-01T01:01}]";
+        String expectedTasks = "[Task{id=1, name='Task 1', description='Description 1', status=NEW, duration=PT5H, startTime=2021-01-01T01:01}, Task{id=2, name='Task 2', description='Description 2', status=NEW, duration=PT5H, startTime=2021-02-01T01:01}]";
         Assertions.assertEquals(expectedTasks, taskManager.getAllTasks().toString());
     }
 
@@ -53,7 +53,7 @@ public abstract class TaskManagerTest<T extends TaskManager>{
     void createTaskTest() {
         taskManager.createTask(task1);
 
-        String expectedTask = "Task{id=1, name='Task 1', description='Description 1', status=NEW, durationPT5H, startTime=2021-01-01T01:01}";
+        String expectedTask = "Task{id=1, name='Task 1', description='Description 1', status=NEW, duration=PT5H, startTime=2021-01-01T01:01}";
         Assertions.assertEquals(expectedTask, task1.toString());
     }
 
@@ -84,8 +84,8 @@ public abstract class TaskManagerTest<T extends TaskManager>{
         taskManager.createTask(task2);
         taskManager.createTask(task1);
 
-        String expectedTasks = "[Task{id=2, name='Task 1', description='Description 1', status=NEW, durationPT5H, startTime=2021-01-01T01:01}, " +
-                "Task{id=1, name='Task 2', description='Description 2', status=NEW, durationPT5H, startTime=2021-02-01T01:01}]";
+        String expectedTasks = "[Task{id=2, name='Task 1', description='Description 1', status=NEW, duration=PT5H, startTime=2021-01-01T01:01}, " +
+                "Task{id=1, name='Task 2', description='Description 2', status=NEW, duration=PT5H, startTime=2021-02-01T01:01}]";
         String actualTasks = taskManager.getPrioritizedTasks().toString();
         Assertions.assertEquals(expectedTasks, actualTasks);
     }

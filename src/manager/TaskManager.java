@@ -16,7 +16,7 @@ public interface TaskManager {
 
     Task updateTask(Task newTask);
 
-    void removeTask(Task task);
+    void removeTask(int taskId);
 
     List<Subtask> getAllSubtasks();
 
@@ -28,7 +28,7 @@ public interface TaskManager {
 
     Subtask updateSubtask(Subtask newSubtask);
 
-    void removeSubtask(Subtask subtask);
+    void removeSubtask(int subtaskId);
 
     List<Epic> getAllEpics();
 

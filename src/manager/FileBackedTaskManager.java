@@ -157,8 +157,8 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     }
 
     @Override
-    public void removeTask(Task task) {
-        super.removeTask(task);
+    public void removeTask(int taskId) {
+        super.removeTask(taskId);
         try {
             save();
         } catch (ManagerSaveException e) {
@@ -198,8 +198,8 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     }
 
     @Override
-    public void removeSubtask(Subtask subtask) {
-        super.removeSubtask(subtask);
+    public void removeSubtask(int subtaskId) {
+        super.removeSubtask(subtaskId);
         try {
             save();
         } catch (ManagerSaveException e) {

@@ -35,9 +35,9 @@ class InMemoryHistoryManagerTest {
         hm.add(epic1);
         hm.add(subtask1);
 
-        String expected = "[Task{id=1, name='Task 1', description='Description 1', status=NEW, durationPT5H, startTime=2021-01-01T01:01}, " +
-                "Epic{id=3, name='Epic 1', description='Description epic 1', status=NEW, subtasksList=[], durationPT5H, startTime=2021-03-01T01:01}, " +
-                "Subtask{id=5, name='SubTask 1', description='Description subtask 1', status=NEW, durationPT5H, startTime=2021-05-01T01:01, epicId=3}]";
+        String expected = "[Task{id=1, name='Task 1', description='Description 1', status=NEW, duration=PT5H, startTime=2021-01-01T01:01}, " +
+                "Epic{id=3, name='Epic 1', description='Description epic 1', status=NEW, subtasksList=[], duration=PT5H, startTime=2021-03-01T01:01}, " +
+                "Subtask{id=5, name='SubTask 1', description='Description subtask 1', status=NEW, duration=PT5H, startTime=2021-05-01T01:01, epicId=3}]";
         String actual = hm.getHistory().toString();
 
         Assertions.assertEquals(expected, actual);
@@ -55,9 +55,9 @@ class InMemoryHistoryManagerTest {
         tm.getEpicById(2);
         tm.getSubtaskById(3);
 
-        String expected = "[Task{id=1, name='Task 1', description='Description 1', status=NEW, durationPT5H, startTime=2021-01-01T01:01}, " +
-                "Epic{id=2, name='Epic 1', description='Description epic 1', status=NEW, subtasksList=[Subtask{id=3, name='Subtask', description='Description', status=NEW, durationPT5H, startTime=2025-03-03T18:17, epicId=2}], durationPT5H, startTime=2025-03-03T18:17}, " +
-                "Subtask{id=3, name='Subtask', description='Description', status=NEW, durationPT5H, startTime=2025-03-03T18:17, epicId=2}]";
+        String expected = "[Task{id=1, name='Task 1', description='Description 1', status=NEW, duration=PT5H, startTime=2021-01-01T01:01}, " +
+                "Epic{id=2, name='Epic 1', description='Description epic 1', status=NEW, subtasksList=[Subtask{id=3, name='Subtask', description='Description', status=NEW, duration=PT5H, startTime=2025-03-03T18:17, epicId=2}], duration=PT5H, startTime=2025-03-03T18:17}, " +
+                "Subtask{id=3, name='Subtask', description='Description', status=NEW, duration=PT5H, startTime=2025-03-03T18:17, epicId=2}]";
 
         String actual = tm.getHistory().toString();
         Assertions.assertEquals(expected, actual);
@@ -90,18 +90,18 @@ class InMemoryHistoryManagerTest {
             tm.getSubtaskById(i);
         }
 
-        String expected = "[Task{id=1, name='Task 1', description='Description 1', status=NEW, durationPT5H, startTime=2021-01-02T01:01}, " +
-                "Task{id=2, name='Task 2', description='Description 2', status=NEW, durationPT5H, startTime=2021-01-03T01:01}, " +
-                "Task{id=3, name='Task 3', description='Description 3', status=NEW, durationPT5H, startTime=2021-01-04T01:01}, " +
-                "Task{id=4, name='Task 4', description='Description 4', status=NEW, durationPT5H, startTime=2021-01-05T01:01}, " +
-                "Epic{id=5, name='Epic 5', description='Description epic 5', status=NEW, subtasksList=[Subtask{id=10, name='Subtask 10', description='Description 10', status=NEW, durationPT5H, startTime=2021-01-27T01:01, epicId=5}, Subtask{id=11, name='Subtask 11', description='Description 11', status=NEW, durationPT5H, startTime=2021-01-28T01:01, epicId=5}]" +
-                ", durationPT10H, startTime=2021-01-27T01:01}, " +
-                "Epic{id=6, name='Epic 6', description='Description epic 6', status=NEW, subtasksList=[], durationPT5H, startTime=2021-01-17T07:01}, " +
-                "Epic{id=7, name='Epic 7', description='Description epic 7', status=NEW, subtasksList=[], durationPT5H, startTime=2021-01-17T08:01}, " +
-                "Epic{id=8, name='Epic 8', description='Description epic 8', status=NEW, subtasksList=[], durationPT5H, startTime=2021-01-17T09:01}, " +
-                "Epic{id=9, name='Epic 9', description='Description epic 9', status=NEW, subtasksList=[], durationPT5H, startTime=2021-01-17T10:01}, " +
-                "Subtask{id=10, name='Subtask 10', description='Description 10', status=NEW, durationPT5H, startTime=2021-01-27T01:01, epicId=5}, " +
-                "Subtask{id=11, name='Subtask 11', description='Description 11', status=NEW, durationPT5H, startTime=2021-01-28T01:01, epicId=5}]";
+        String expected = "[Task{id=1, name='Task 1', description='Description 1', status=NEW, duration=PT5H, startTime=2021-01-02T01:01}, " +
+                "Task{id=2, name='Task 2', description='Description 2', status=NEW, duration=PT5H, startTime=2021-01-03T01:01}, " +
+                "Task{id=3, name='Task 3', description='Description 3', status=NEW, duration=PT5H, startTime=2021-01-04T01:01}, " +
+                "Task{id=4, name='Task 4', description='Description 4', status=NEW, duration=PT5H, startTime=2021-01-05T01:01}, " +
+                "Epic{id=5, name='Epic 5', description='Description epic 5', status=NEW, subtasksList=[Subtask{id=10, name='Subtask 10', description='Description 10', status=NEW, duration=PT5H, startTime=2021-01-27T01:01, epicId=5}, Subtask{id=11, name='Subtask 11', description='Description 11', status=NEW, duration=PT5H, startTime=2021-01-28T01:01, epicId=5}]" +
+                ", duration=PT10H, startTime=2021-01-27T01:01}, " +
+                "Epic{id=6, name='Epic 6', description='Description epic 6', status=NEW, subtasksList=[], duration=PT5H, startTime=2021-01-17T07:01}, " +
+                "Epic{id=7, name='Epic 7', description='Description epic 7', status=NEW, subtasksList=[], duration=PT5H, startTime=2021-01-17T08:01}, " +
+                "Epic{id=8, name='Epic 8', description='Description epic 8', status=NEW, subtasksList=[], duration=PT5H, startTime=2021-01-17T09:01}, " +
+                "Epic{id=9, name='Epic 9', description='Description epic 9', status=NEW, subtasksList=[], duration=PT5H, startTime=2021-01-17T10:01}, " +
+                "Subtask{id=10, name='Subtask 10', description='Description 10', status=NEW, duration=PT5H, startTime=2021-01-27T01:01, epicId=5}, " +
+                "Subtask{id=11, name='Subtask 11', description='Description 11', status=NEW, duration=PT5H, startTime=2021-01-28T01:01, epicId=5}]";
 
         String actual = tm.getHistory().toString();
         Assertions.assertEquals(expected, actual);
@@ -117,9 +117,9 @@ class InMemoryHistoryManagerTest {
         hm.add(epic1);
         hm.add(subtask1);
 
-        String expected = "[Task{id=1, name='Task 1', description='Description 1', status=NEW, durationPT5H, startTime=2021-01-01T01:01}, " +
-                "Epic{id=3, name='Epic 1', description='Description epic 1', status=NEW, subtasksList=[], durationPT5H, startTime=2021-03-01T01:01}, " +
-                "Subtask{id=5, name='SubTask 1', description='Description subtask 1', status=NEW, durationPT5H, startTime=2021-05-01T01:01, epicId=3}]";
+        String expected = "[Task{id=1, name='Task 1', description='Description 1', status=NEW, duration=PT5H, startTime=2021-01-01T01:01}, " +
+                "Epic{id=3, name='Epic 1', description='Description epic 1', status=NEW, subtasksList=[], duration=PT5H, startTime=2021-03-01T01:01}, " +
+                "Subtask{id=5, name='SubTask 1', description='Description subtask 1', status=NEW, duration=PT5H, startTime=2021-05-01T01:01, epicId=3}]";
 
         Assertions.assertEquals(expected, hm.getHistory().toString());
     }
@@ -131,7 +131,7 @@ class InMemoryHistoryManagerTest {
         hm.add(subtask2);
         hm.remove(subtask2.getId());
 
-        String expected = "[Subtask{id=5, name='SubTask 1', description='Description subtask 1', status=NEW, durationPT5H, startTime=2021-05-01T01:01, epicId=3}]";
+        String expected = "[Subtask{id=5, name='SubTask 1', description='Description subtask 1', status=NEW, duration=PT5H, startTime=2021-05-01T01:01, epicId=3}]";
         Assertions.assertEquals(expected, hm.getHistory().toString());
     }
 

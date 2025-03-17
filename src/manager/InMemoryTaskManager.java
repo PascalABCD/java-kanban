@@ -90,11 +90,12 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public void removeTask(Task task) {
-        if (tasks.containsValue(task)) {
+    public void removeTask(int taskId) {
+        if (tasks.containsKey(taskId)) {
+            Task task = tasks.get(taskId);
             prioritizedTasks.remove(task);
-            tasks.remove(task.getId());
-            hm.remove(task.getId());
+            tasks.remove(taskId);
+            hm.remove(taskId);
         } else {
             System.out.println("Cannot remove. Task does not exist.");
         }
@@ -184,8 +185,9 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public void removeSubtask(Subtask subtask) {
-        if (subtasks.containsKey(subtask.getId())) {
+    public void removeSubtask(int subtaskId) {
+        if (subtasks.containsKey(subtaskId)) {
+            Subtask subtask = subtasks.get(subtaskId);
             Epic epic = epics.get(subtask.getEpicId());
             prioritizedTasks.remove(subtask);
             epic.removeSubtaskById(subtask);
